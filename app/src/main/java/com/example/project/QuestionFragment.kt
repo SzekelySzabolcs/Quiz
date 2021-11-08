@@ -21,6 +21,7 @@ private var data=""
 
 class QuestionFragment : Fragment() {
     var a=0
+    var number=0
     val viewmodel:Model by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,13 +78,23 @@ class QuestionFragment : Fragment() {
         }
 
         binding.start.setOnClickListener() {
+            number=number+1
+            binding.progressBar.setProgress(number)
+            binding.progressBar.setMax(viewmodel.numberQuestion)
+            binding.max.setText(""+number+"/"+viewmodel.numberQuestion)
+
             changeTextData()
 
         }
         binding.back.setOnClickListener()
         {
+            number-=1
+            binding.progressBar.setProgress(number)
+            binding.max.setText(""+number+"/"+viewmodel.numberQuestion)
+
             if(a!=0){
                 a-=2
+
                 changeTextData()
             }
             else{
