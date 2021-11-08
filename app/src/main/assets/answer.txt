@@ -1,0 +1,7 @@
+5+5?,10,matek,10,5,6,7
+5+2?,7,matek,10,5,6,7
+8+5?,13,matek,5,1,13,8
+5+7?,12,matek,11,12,15,18
+az alabiak kozul melyik allat?,macska,allat,asztal,szek,macska,polc
+How to kill an activity in Android?,A & B,Android,None of the Above,finish(),A & B,kill()
+How many sizes are supported by Android?,Android supports small normal large and extra-large sizes,Android,Android supports small normal large and extra-large sizes,Android supported all sizes,Size is undefined in android,Android does not support all sizes

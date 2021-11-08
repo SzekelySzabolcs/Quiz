@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddQuestions">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:layout_width="197dp"
+        android:layout_height="180dp"
+        android:background="@drawable/add"
+        android:layout_gravity="center_horizontal"
+        android:elevation="35dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Questions"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="190dp"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:textColor="#FF8C00" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="240dp"
+        android:text="category:"
+        android:textSize="20dp"
+        android:layout_marginLeft="20dp"
+        />
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="240dp"
+        android:layout_marginLeft="120dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="question:"
+        android:textSize="20dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginLeft="20dp"
+        />
+    <EditText
+        android:id="@+id/question_text"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:layout_marginLeft="120dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="answer:"
+        android:textSize="20dp"
+        android:layout_marginTop="350dp"
+        android:layout_marginLeft="20dp"
+        />
+
+    <EditText
+        android:id="@+id/answer1"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="120dp"
+        android:layout_marginTop="350dp"
+        android:minHeight="48dp" />
+    <EditText
+        android:id="@+id/answer2"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="120dp"/>
+    <EditText
+        android:id="@+id/answer3"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="450dp"
+        android:layout_marginLeft="120dp"/>
+    <EditText
+        android:id="@+id/answer4"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="120dp"/>
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="570dp"
+        android:text="Add" />
+</FrameLayout>
