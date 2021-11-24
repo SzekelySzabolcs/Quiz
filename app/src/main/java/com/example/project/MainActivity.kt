@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewmodel= ViewModelProvider(this).get(Model::class.java)
+        readFile()
         getCurrentData()
 
         var btn:BottomNavigationView = findViewById(R.id.bottom_nav)
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        //readFile()
+
     }
     private fun readFile() {
         try {
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                     for (result in questionResponse?.getResults()!!){
 
                         categoryList.add(result?.getCategory().toString())
-                      // Toast.makeText(this@MainActivity,""+result?.getIncorrectAnswers(),Toast.LENGTH_SHORT).show()
+
                         for(item in result?.getIncorrectAnswers()!!){
                             answer.add(item.toString())
                         }
@@ -121,11 +122,11 @@ class MainActivity : AppCompatActivity() {
                         val question = Question(result.getQuestion().toString(), answer.toList(),
                             result.getCorrectAnswer().toString(), result.getCategory().toString())
                         viewmodel.result.add(question)
-                        Toast.makeText(this@MainActivity,question.toString(),Toast.LENGTH_SHORT).show()
+
                         answer.removeAll(answer)
 
                     }
-                    viewmodel.category = categoryList
+                    viewmodel.category += categoryList
                     viewmodel.numberQuestion+=categoryList.size
 
                     Log.d("Retrofit", "onResponse: Success")

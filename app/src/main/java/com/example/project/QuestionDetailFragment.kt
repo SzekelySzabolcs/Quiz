@@ -38,7 +38,7 @@ class QuestionDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.textquestion.text=param1.toString()
-        binding.Single.text="Single answer"
+      //  binding.Single.text="Single answer"
 
             binding.answer1.text=array[0]
             binding.answer2.text=array[1]

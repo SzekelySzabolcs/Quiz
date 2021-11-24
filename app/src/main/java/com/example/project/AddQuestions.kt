@@ -1,5 +1,6 @@
 package com.example.project
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,8 +12,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.project.databinding.FragmentAddQuestionsBinding
-import com.example.project.databinding.FragmentProfileBinding
-import java.util.*
 import kotlin.collections.ArrayList
 
 private lateinit var binding: FragmentAddQuestionsBinding
@@ -38,6 +37,7 @@ class AddQuestions : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var categ=""
         val string = data.category.distinct()
         //data.category.distinct()
         binding.spinner.adapter =
@@ -47,7 +47,7 @@ class AddQuestions : Fragment() {
             :AdapterView.OnItemSelectedListener{
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                save.add(string.get(p2))
+                categ=(string.get(p2))
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -64,6 +64,7 @@ class AddQuestions : Fragment() {
                     Toast.makeText(context,"empty field",Toast.LENGTH_SHORT).show()
                 }
                  else{
+                     save.add(categ)
                     save.add(binding.questionText.text.toString())
                     save.add(binding.answer1.text.toString())
                     save.add(binding.answer2.text.toString())
@@ -74,11 +75,18 @@ class AddQuestions : Fragment() {
                     for (i in 2 until save.size){
                         answer.add(save[i])
                     }
-                    val add= Question(save[1], answer, save[2],save[0])
-                   // Toast.makeText(context,""+add,Toast.LENGTH_LONG).show()
+                    val addQuestion= Question(save[1], answer, save[2],save[0])
+                    Toast.makeText(context,""+save[0],Toast.LENGTH_LONG).show()
+
                     data.numberQuestion+=1
-                    data.result.add(add)
+                    data.result.add(addQuestion)
                     save.removeAll(save)
+
+                    activity?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.fragmentView,QuizStartFragment.newInstacne())
+                        //  ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        ?.commit()
                 }
 
             }
