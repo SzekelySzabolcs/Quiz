@@ -1,39 +1,29 @@
 package com.example.project
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.provider.MediaStore
-import android.text.TextUtils
+import android.util.Log
 import android.widget.*
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.text.set
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.project.databinding.ActivityMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.example.retrofit.RetroService
+import com.example.retrofit.ServiceBuilder
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.FileNotFoundException
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
-
+    val baseUrl="https://pure-gorge-51703.herokuapp.com"
     lateinit var viewmodel:Model
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewmodel= ViewModelProvider(this).get(Model::class.java)
-
-
+        getCurrentData()
 
         var btn:BottomNavigationView = findViewById(R.id.bottom_nav)
        // var frag:FrameLayout=findViewById(R.id.fragmentView)
@@ -74,9 +64,8 @@ class MainActivity : AppCompatActivity() {
                         ?.commit()
                 }
             }
-
         }
-        readFile()
+        //readFile()
     }
     private fun readFile() {
         try {
@@ -101,7 +90,52 @@ class MainActivity : AppCompatActivity() {
         viewmodel.numberQuestion= viewmodel.result.size
     }
 
+    internal fun getCurrentData(){
+        val request=ServiceBuilder.buildService(RetroService::class.java)
+        val map = HashMap<String, String>()
+        var szam: Int = 10
+        map.put("amount", szam.toString())
+        map.put("type", "multiple")
+        val call = request.getData(map)
 
+        call.enqueue(object:Callback<QuestionResponse>{
+            override fun onResponse(
+                call: Call<QuestionResponse>,
+                response: Response<QuestionResponse>
+            ) {
+                if (response.isSuccessful){
+
+                    val questionResponse = response.body()
+                    val answer= mutableListOf<String>()
+                    val categoryList = ArrayList<String>()
+
+                    for (result in questionResponse?.getResults()!!){
+
+                        categoryList.add(result?.getCategory().toString())
+                      // Toast.makeText(this@MainActivity,""+result?.getIncorrectAnswers(),Toast.LENGTH_SHORT).show()
+                        for(item in result?.getIncorrectAnswers()!!){
+                            answer.add(item.toString())
+                        }
+
+                        answer.add(result.getCorrectAnswer().toString())
+                        val question = Question(result.getQuestion().toString(), answer.toList(),
+                            result.getCorrectAnswer().toString(), result.getCategory().toString())
+                        viewmodel.result.add(question)
+                        Toast.makeText(this@MainActivity,question.toString(),Toast.LENGTH_SHORT).show()
+                        answer.removeAll(answer)
+
+                    }
+                    viewmodel.category = categoryList
+                    viewmodel.numberQuestion+=categoryList.size
+
+                    Log.d("Retrofit", "onResponse: Success")
+                }
+            }
+            override fun onFailure(call: Call<QuestionResponse>, t: Throwable) {
+                Toast.makeText(this@MainActivity,"${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 }
 
 

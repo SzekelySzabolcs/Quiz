@@ -1,17 +1,14 @@
 package com.example.project
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.project.databinding.FragmentQuestionBinding
-import java.io.FileNotFoundException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -20,7 +17,8 @@ private lateinit var binding : FragmentQuestionBinding
 private var data=""
 
 class QuestionFragment : Fragment() {
-    var a=0
+
+    var currentQuestionIndex=0
     var number=0
     val viewmodel:Model by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +26,8 @@ class QuestionFragment : Fragment() {
         arguments?.let {
 
         }
+
+
     }
 
     override fun onCreateView(
@@ -45,8 +45,6 @@ class QuestionFragment : Fragment() {
         viewmodel.number=0
         random()
         changeTextData()
-
-
 
         binding.radiogroup.setOnCheckedChangeListener { radioGroup, i ->
             if(i==R.id.answer1){
@@ -78,28 +76,37 @@ class QuestionFragment : Fragment() {
         }
 
         binding.start.setOnClickListener() {
+            if (number >= viewmodel.result.size-1) {
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.replace(R.id.fragmentView, ProfileFragment.newInstance())
+                    ?.commit()
+
+                return@setOnClickListener
+            }
+
+            currentQuestionIndex+=1
             number=number+1
             binding.progressBar.setProgress(number)
             binding.progressBar.setMax(viewmodel.numberQuestion)
             binding.max.setText(""+number+"/"+viewmodel.numberQuestion)
 
-            changeTextData()
 
+
+            changeTextData()
         }
         binding.back.setOnClickListener()
         {
+            if (currentQuestionIndex <= 0) {
+                Toast.makeText(context, "You can't go back!", Toast.LENGTH_LONG).show();
+                return@setOnClickListener
+            }
+
             number-=1
             binding.progressBar.setProgress(number)
             binding.max.setText(""+number+"/"+viewmodel.numberQuestion)
-
-            if(a!=0){
-                a-=2
-
-                changeTextData()
-            }
-            else{
-                changeTextData()
-            }
+            currentQuestionIndex-=1
+            changeTextData()
 
         }
 
@@ -111,34 +118,27 @@ class QuestionFragment : Fragment() {
     }
 
     private fun changeTextData() {
+        if (viewmodel.result.size == 0) {
+            Log.d("", "changeTextData: empty result size")
+            return
+        }
 
-        if (viewmodel.result.size >=a+1) {
-            val question: Question = viewmodel.result.get(a)
-            data = question.trueAnswer
-            binding.questionText.text = question.question
-            val answerText: ArrayList<String> = ArrayList()
-            for (answer in question.questionList) {
-                answerText.add(answer)
-            }
-            binding.answer1.setText(answerText[0].toString())
-            binding.answer2.setText(answerText[1].toString())
-            binding.answer3.setText(answerText[2].toString())
-            binding.answer4.setText(answerText[3].toString())
-            a+=1
+        val question: Question = viewmodel.result.get(currentQuestionIndex)
+        data = question.trueAnswer
+        binding.questionText.text = question.question
+
+        if (question.questionList.isEmpty()) {
+            Log.d("", "changeTextData: empty list")
+            return
+        }
+
+        binding.answer1.setText(question.questionList[0])
+        binding.answer2.setText(question.questionList[1])
+        binding.answer3.setText(question.questionList[2])
+        binding.answer4.setText(question.questionList[3])
 
             //viewmodel.result.remove(question)
-        }
-
-
-            else {
-
-                activity?.supportFragmentManager
-                    ?.beginTransaction()
-                    ?.replace(R.id.fragmentView, ProfileFragment.newInstance())
-                    ?.commit()
-
-            }
-        }
+    }
 
 
     companion object {

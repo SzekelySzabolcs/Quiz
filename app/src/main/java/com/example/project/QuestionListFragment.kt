@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FragmentAddQuestionsBinding
 import com.example.project.databinding.FragmentQuestionListBinding
+import retrofit2.Retrofit
 
 private lateinit var binding:FragmentQuestionListBinding
 class QuestionListFragment : Fragment() {
@@ -42,7 +43,8 @@ class QuestionListFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         adapter= RecyclerAdapter(set.result,requireContext()){index -> deleteitem(index)}
         recyclerView.adapter=adapter
-
+        Retrofit.Builder()
+       binding.spinner
 
     }
 
@@ -52,6 +54,7 @@ class QuestionListFragment : Fragment() {
         set.result.remove(question)
         adapter.setItem(set.result)
     }
+
 
 
     companion object {
